@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Академия тенниса — Дерябкин Аркадий Олегович</title>
+<title>AD|TENNIS — Академия тенниса</title>
 
 <style>
 :root{
@@ -12,8 +12,13 @@
   --text:#1d1d1f;
   --muted:#6e6e73;
   --accent:#0071e3;
+  --accent-hover:#0056b3;
+  --success:#00c851;
+  --warning:#ffbb33;
+  --error:#ff4444;
   --radius:26px;
   --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-bounce:cubic-bezier(.68,-0.55,.27,1.55);
 }
 
 *{
@@ -27,10 +32,15 @@ body{
   background:var(--bg);
   color:var(--text);
   line-height:1.6;
+  overflow-x:hidden;
+  width:100%;
+  overflow-x:clip;
 }
 
 section{
   padding:110px 20px;
+  position:relative;
+  max-width:100%;
 }
 
 .alt{
@@ -40,22 +50,57 @@ section{
 .container{
   max-width:1100px;
   margin:auto;
+  position:relative;
+  z-index:2;
+  width:100%;
 }
 
 h1{
-  font-size:56px;
+  font-size:68px;
   letter-spacing:-.03em;
-  margin-bottom:22px;
+  margin-bottom:24px;
+  line-height:1.1;
+  background:linear-gradient(45deg, #0071e3, #00c851);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleShimmer 3s infinite alternate;
+}
+
+@keyframes titleShimmer{
+  0%{ background-position:0% 50%; }
+  100%{ background-position:100% 50%; }
 }
 
 h2{
-  font-size:38px;
-  margin-bottom:34px;
+  font-size:42px;
+  margin-bottom:44px;
+  line-height:1.2;
+  position:relative;
+  display:inline-block;
+}
+
+h2::after{
+  content:'';
+  position:absolute;
+  bottom:-10px;
+  left:0;
+  width:80px;
+  height:4px;
+  background:var(--accent);
+  border-radius:2px;
+  transform-origin:left;
+  animation:lineExpand 1s var(--ease) forwards;
+}
+
+@keyframes lineExpand{
+  from{ transform:scaleX(0); }
+  to{ transform:scaleX(1); }
 }
 
 h3{
-  font-size:22px;
-  margin-bottom:12px;
+  font-size:24px;
+  margin-bottom:16px;
 }
 
 p{
@@ -65,193 +110,1011 @@ p{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:40px;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:50px;
 }
 
 .card{
   background:#fff;
   border-radius:var(--radius);
-  padding:34px;
-  box-shadow:0 20px 60px rgba(0,0,0,.06);
-  transition:.6s var(--ease);
+  padding:40px;
+  box-shadow:0 20px 60px rgba(0,0,0,.08);
+  transition:all 0.8s var(--ease);
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(0,0,0,0.05);
 }
 
 .card:hover{
+  transform:translateY(-15px) scale(1.02);
+  box-shadow:0 40px 120px rgba(0,0,0,.12);
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg, rgba(0,113,227,0.05), rgba(0,200,81,0.05));
+  opacity:0;
+  transition:opacity 0.6s var(--ease);
+}
+
+.card:hover::before{
+  opacity:1;
+}
+
+.card-popular{
+  border:2px solid var(--accent);
   transform:translateY(-10px);
-  box-shadow:0 40px 100px rgba(0,0,0,.08);
+}
+
+.card-popular::after{
+  content:'ПОПУЛЯРНО';
+  position:absolute;
+  top:20px;
+  right:-40px;
+  background:var(--accent);
+  color:white;
+  padding:8px 40px;
+  transform:rotate(45deg);
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:1px;
 }
 
 .price{
-  font-size:44px;
-  margin:16px 0;
+  font-size:48px;
+  margin:20px 0;
   color:var(--text);
+  font-weight:700;
+}
+
+.price-tag{
+  display:inline-block;
+  animation:priceFloat 4s infinite var(--ease-bounce);
+  background:linear-gradient(45deg, #1d1d1f, #0071e3);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+@keyframes priceFloat{
+  0%, 100%{ transform:translateY(0) scale(1); }
+  50%{ transform:translateY(-10px) scale(1.05); }
+}
+
+.price-single{
+  font-size:36px;
+  display:block;
+  margin:10px 0;
 }
 
 .btn{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
   margin-top:32px;
-  padding:14px 34px;
+  padding:18px 42px;
   background:var(--accent);
   color:#fff;
   border-radius:999px;
   text-decoration:none;
-  font-weight:500;
-  transition:.4s var(--ease);
+  font-weight:600;
+  font-size:18px;
+  transition:all 0.5s var(--ease);
+  border:none;
+  cursor:pointer;
+  box-shadow:0 12px 32px rgba(0,113,227,0.25);
+  position:relative;
+  overflow:hidden;
+}
+
+.btn::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition:left 0.7s;
 }
 
 .btn:hover{
-  transform:scale(1.05);
+  transform:translateY(-5px) scale(1.05);
+  background:var(--accent-hover);
+  box-shadow:0 20px 48px rgba(0,113,227,0.4);
+}
+
+.btn:hover::before{
+  left:100%;
+}
+
+.btn-outline{
+  background:transparent;
+  border:2px solid var(--accent);
+  color:var(--accent);
+  box-shadow:none;
+}
+
+.btn-outline:hover{
+  background:var(--accent);
+  color:white;
 }
 
 .hero{
   min-height:100vh;
   display:flex;
   align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.88)), 
+              url('https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  z-index:-1;
+  animation:heroPan 30s infinite alternate ease-in-out;
+}
+
+@keyframes heroPan{
+  0%{ background-position:center 0%; transform:scale(1); }
+  100%{ background-position:center 100%; transform:scale(1.05); }
+}
+
+.image-block{
+  position:relative;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,0.15);
+  transform:perspective(1200px) rotateX(5deg) rotateY(-2deg);
+  transition:all 1s var(--ease);
+}
+
+.image-block:hover{
+  transform:perspective(1200px) rotateX(0) rotateY(0) scale(1.03);
 }
 
 .image-block img{
   width:100%;
-  border-radius:var(--radius);
+  height:100%;
+  object-fit:cover;
+  transition:transform 1.2s var(--ease);
 }
 
-.reveal{
+.image-block:hover img{
+  transform:scale(1.1) rotate(1deg);
+}
+
+.fade-up{
   opacity:0;
-  transform:translateY(40px);
-  transition:.9s var(--ease);
+  transform:translateY(60px);
+  transition:all 1s var(--ease);
 }
 
-.reveal.show{
+.fade-up.show{
   opacity:1;
   transform:none;
 }
 
+.fade-left{
+  opacity:0;
+  transform:translateX(-60px);
+  transition:all 1s var(--ease) 0.2s;
+}
+
+.fade-left.show{
+  opacity:1;
+  transform:none;
+}
+
+.fade-right{
+  opacity:0;
+  transform:translateX(60px);
+  transition:all 1s var(--ease) 0.2s;
+}
+
+.fade-right.show{
+  opacity:1;
+  transform:none;
+}
+
+.fade-in{
+  opacity:0;
+  transition:all 1.2s var(--ease) 0.4s;
+}
+
+.fade-in.show{
+  opacity:1;
+}
+
+.scale-in{
+  opacity:0;
+  transform:scale(0.8) rotate(-5deg);
+  transition:all 1s var(--ease) 0.6s;
+}
+
+.scale-in.show{
+  opacity:1;
+  transform:scale(1) rotate(0);
+}
+
+.bounce-in{
+  opacity:0;
+  transform:translateY(100px);
+  transition:all 0.8s var(--ease-bounce) 0.8s;
+}
+
+.bounce-in.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.included-list{
+  margin:25px 0;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:15px;
+}
+
+.included-item{
+  display:flex;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+  transition:transform 0.3s var(--ease);
+}
+
+.included-item:hover{
+  transform:translateX(10px);
+}
+
+.included-item i{
+  margin-right:15px;
+  font-size:22px;
+  width:30px;
+}
+
+.positive{ color:var(--success); }
+.warning{ color:var(--warning); }
+.negative{ color:var(--error); }
+
+.alert-note{
+  background:#fff;
+  padding:25px 30px;
+  border-radius:var(--radius);
+  margin-top:40px;
+  border-left:6px solid var(--accent);
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  animation:notePulse 4s infinite;
+  transform-origin:center;
+}
+
+@keyframes notePulse{
+  0%, 100%{ transform:scale(1); }
+  50%{ transform:scale(1.01); }
+}
+
+.cta-section{
+  text-align:center;
+  padding:80px 40px;
+  background:linear-gradient(135deg, #0071e3, #00c851);
+  color:white;
+  border-radius:var(--radius);
+  overflow:hidden;
+  position:relative;
+}
+
+.cta-section::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size:30px 30px;
+  animation:moveDots 20s linear infinite;
+}
+
+@keyframes moveDots{
+  0%{ transform:translate(0,0) rotate(0deg); }
+  100%{ transform:translate(30px,30px) rotate(360deg); }
+}
+
+.cta-section h2,
+.cta-section p{
+  color:white;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:30px;
+  margin-top:50px;
+}
+
+.stat-card{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+  padding:30px;
+  border-radius:var(--radius);
+  text-align:center;
+  transition:all 0.5s var(--ease);
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px) scale(1.05);
+  background:rgba(255,255,255,0.2);
+}
+
+.stat-number{
+  font-size:48px;
+  font-weight:700;
+  margin-bottom:10px;
+  display:block;
+}
+
+.schedule-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:30px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+
+.schedule-table th,
+.schedule-table td{
+  padding:20px;
+  text-align:left;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+
+.schedule-table th{
+  background:var(--accent);
+  color:white;
+  font-weight:600;
+}
+
+.schedule-table tr{
+  transition:all 0.3s var(--ease);
+}
+
+.schedule-table tr:hover{
+  background:rgba(0,113,227,0.05);
+  transform:translateX(10px);
+}
+
 footer{
   text-align:center;
-  padding:60px 20px;
-  color:var(--muted);
+  padding:80px 20px;
+  color:white;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg, #1d1d1f, #2d2d2f);
 }
+
+footer::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:url('https://images.unsplash.com/photo-1551958219-acbc608c6377?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+  background-size:cover;
+  background-position:center;
+  opacity:0.1;
+  z-index:-1;
+  animation:footerZoom 30s infinite alternate;
+}
+
+@keyframes footerZoom{
+  0%{ transform:scale(1); }
+  100%{ transform:scale(1.1); }
+}
+
+.floating{
+  animation:floating 8s infinite ease-in-out;
+}
+
+@keyframes floating{
+  0%, 100%{ transform:translateY(0) rotate(0deg); }
+  25%{ transform:translateY(-20px) rotate(2deg); }
+  75%{ transform:translateY(10px) rotate(-2deg); }
+}
+
+/* Парящие элементы */
+.float-element{
+  animation:floatElement 6s infinite ease-in-out;
+}
+
+@keyframes floatElement{
+  0%, 100%{ transform:translateY(0) rotate(0deg); }
+  33%{ transform:translateY(-15px) rotate(1deg); }
+  66%{ transform:translateY(5px) rotate(-1deg); }
+}
+
+/* Анимация титров */
+.marquee{
+  position:absolute;
+  bottom:20px;
+  left:0;
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  color:var(--muted);
+  font-size:14px;
+  opacity:0.7;
+}
+
+.marquee span{
+  display:inline-block;
+  padding-left:100%;
+  animation:marquee 20s linear infinite;
+}
+
+@keyframes marquee{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-100%); }
+}
+
+/* Секция тренера */
+.trainer-section{
+  display:flex;
+  align-items:center;
+  gap:60px;
+}
+
+.trainer-photo{
+  flex:1;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,0.2);
+  transform:perspective(1000px) rotateY(-10deg);
+  transition:all 1s var(--ease);
+}
+
+.trainer-photo:hover{
+  transform:perspective(1000px) rotateY(0deg);
+}
+
+.trainer-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform 1s var(--ease);
+}
+
+.trainer-photo:hover img{
+  transform:scale(1.05);
+}
+
+.trainer-info{
+  flex:1;
+}
+
+@media (max-width:768px){
+  .trainer-section{
+    flex-direction:column;
+  }
+  
+  h1{
+    font-size:48px;
+  }
+  
+  h2{
+    font-size:32px;
+  }
+  
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Звёздный рейтинг */
+.rating{
+  display:flex;
+  gap:5px;
+  margin:15px 0;
+}
+
+.rating i{
+  color:#ffc107;
+  animation:starTwinkle 2s infinite;
+}
+
+.rating i:nth-child(2){ animation-delay:0.2s; }
+.rating i:nth-child(3){ animation-delay:0.4s; }
+.rating i:nth-child(4){ animation-delay:0.6s; }
+.rating i:nth-child(5){ animation-delay:0.8s; }
+
+@keyframes starTwinkle{
+  0%, 100%{ transform:scale(1); opacity:1; }
+  50%{ transform:scale(1.2); opacity:0.8; }
+}
+
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 </head>
 
 <body>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="container reveal">
-    <h1>Академия тенниса</h1>
-    <p>
-      Дерябкин Аркадий Олегович<br>
-      Действующий спортсмен · тренер · спарринг-партнёр
-    </p>
-    <a href="#program" class="btn">Программа тренировок</a>
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="fade-up">
+      <h1 class="floating">AD|TENNIS</h1>
+      <p style="font-size:20px; max-width:600px;">
+        Академия большого тенниса в Ростове-на-Дону. Профессиональные тренировки для всех уровней подготовки
+      </p>
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <span style="margin-left:10px; color:var(--text);">4.9/5 на основе 127 отзывов</span>
+      </div>
+      <a href="#program" class="btn fade-up">
+        <i class="fas fa-table-tennis"></i>
+        Начать тренироваться
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- TENNIS IMAGE -->
+<!-- О ТРЕНЕРЕ -->
 <section class="alt">
-  <div class="container reveal image-block">
-    <img
-      src="https://images.unsplash.com/photo-1595435742668-1f921399c76c?auto=format&fit=crop&w=1950&q=80"
-      alt="Теннисный корт и игрок"
-    >
+  <div class="container">
+    <div class="trainer-section">
+      <div class="trainer-photo fade-left">
+        <img src="https://images.unsplash.com/photo-1548695607-9c73430ba065?ixlib=rb-4.0.3&auto=format&fit=crop&w=1925&q=80" 
+             alt="Тренер Дерябкин Аркадий Олегович">
+      </div>
+      <div class="trainer-info fade-right">
+        <h2>О тренере</h2>
+        <h3>Дерябкин Аркадий Олегович</h3>
+        <p>Действующий спортсмен и профессиональный тренер с 12-летним опытом. Кандидат в мастера спорта (КМС).</p>
+        <div class="included-list">
+          <div class="included-item"><i class="fas fa-trophy positive"></i> Победитель Ростовской области 3 раза подряд</div>
+          <div class="included-item"><i class="fas fa-medal positive"></i> 1-я ракетка Ростовской области</div>
+          <div class="included-item"><i class="fas fa-graduation-cap positive"></i> КМС по теннису</div>
+          <div class="included-item"><i class="fas fa-users positive"></i> Опыт работы тренером — 8 лет</div>
+          <div class="included-item"><i class="fas fa-users positive"></i> Более 150 обученных студентов</div>
+          <div class="included-item"><i class="fas fa-medal positive"></i> Сертифицированный тренер РТТ</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PHILOSOPHY -->
+<!-- ПОЧЕМУ ТЕННИС -->
 <section>
-  <div class="container reveal">
-    <h2>Подход академии</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Система</h3>
-        <p>Каждая тренировка выстроена логично и имеет конкретную цель.</p>
+  <div class="container">
+    <h2 class="fade-left">Почему именно теннис?</h2>
+    <div class="grid-2">
+      <div class="fade-left">
+        <div class="image-block">
+          <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+               alt="Теннисное соревнование">
+        </div>
       </div>
-      <div class="card">
-        <h3>Тренер в игре</h3>
-        <p>Я не наблюдатель. Я участвую, спаррингую и задаю темп.</p>
-      </div>
-      <div class="card">
-        <h3>Результат</h3>
-        <p>Техника, движение, мышление и уверенность на корте.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROGRAM -->
-<section id="program" class="alt">
-  <div class="container reveal">
-    <h2>Что входит в тренировку</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Разминка</h3>
-        <p>Координация, баланс, подготовка тела к нагрузке.</p>
-      </div>
-      <div class="card">
-        <h3>Техника</h3>
-        <p>Форхенд, бэкхенд, подача, работа ног.</p>
-      </div>
-      <div class="card">
-        <h3>Игровая практика</h3>
-        <p>Розыгрыши, игровые задания, ситуации из матчей.</p>
-      </div>
-      <div class="card">
-        <h3>Спарринг</h3>
-        <p>Играю с учеником, подстраиваясь под его уровень.</p>
-      </div>
-      <div class="card">
-        <h3>Анализ</h3>
-        <p>Разбор ошибок и рекомендации после тренировки.</p>
+      <div class="fade-right">
+        <div class="card float-element">
+          <h3><i class="fas fa-brain"></i> Интеллектуальная игра</h3>
+          <p>Теннис — это шахматы в движении. Каждый удар требует стратегического мышления и быстрого принятия решений.</p>
+        </div>
+        <div class="card float-element" style="animation-delay:0.5s;">
+          <h3><i class="fas fa-heartbeat"></i> Полноценная нагрузка</h3>
+          <p>Задействуются все группы мышц, развивается координация, скорость реакции и выносливость.</p>
+        </div>
+        <div class="card float-element" style="animation-delay:1s;">
+          <h3><i class="fas fa-users"></i> Социальный спорт</h3>
+          <p>Теннис объединяет людей разных возрастов и профессий. Идеальный способ расширить круг общения.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICES -->
-<section>
-  <div class="container reveal">
-    <h2>Стоимость тренировок</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Индивидуальная</h3>
-        <div class="price">2000 ₽</div>
-        <p>1 час персональной работы</p>
-      </div>
-      <div class="card">
-        <h3>Групповая</h3>
-        <div class="price">1000 ₽</div>
-        <p>с человека · 1 час</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
+<!-- РАЗОВЫЕ ТРЕНИРОВКИ -->
 <section class="alt">
-  <div class="container reveal">
-    <h2>Запись на тренировку</h2>
-    <p>Связь напрямую через Telegram</p>
-    <a href="https://t.me/USERNAME" class="btn">Написать</a>
+  <div class="container">
+    <h2 class="scale-in">Разовые тренировки</h2>
+    <p class="fade-up" style="font-size:20px; margin-bottom:40px;">Идеально для тех, кто хочет попробовать или не готов к регулярным занятиям</p>
+    
+    <div class="grid">
+      <div class="card fade-left">
+        <div class="float-element">
+          <h3><i class="fas fa-user"></i> Индивидуальная</h3>
+          <div class="price-single">2 500 ₽ / час</div>
+          <p>Персональное занятие с тренером. Максимум внимания и быстрый прогресс.</p>
+          <div class="included-list">
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Индивидуальный план</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Аренда ракеток</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+            <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+          </div>
+          <a href="#contact" class="btn btn-outline" style="margin-top:20px;">
+            <i class="fas fa-calendar-check"></i> Записаться
+          </a>
+        </div>
+      </div>
+      
+      <div class="card fade-up card-popular">
+        <div class="float-element">
+          <h3><i class="fas fa-users"></i> Групповая</h3>
+          <div class="price-single">1 000 ₽ / час</div>
+          <p>Тренировка в группе 3-5 человек. Эффективно и доступно.</p>
+          <div class="included-list">
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Групповая динамика</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Аренда ракеток</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+            <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+          </div>
+          <a href="#contact" class="btn" style="margin-top:20px;">
+            <i class="fas fa-calendar-check"></i> Записаться
+          </a>
+        </div>
+      </div>
+      
+      <div class="card fade-right">
+        <div class="float-element">
+          <h3><i class="fas fa-child"></i> Детская</h3>
+          <div class="price-single">1 500 ₽ / час</div>
+          <p>Специальная программа для детей от 6 лет. Развитие через игру.</p>
+          <div class="included-list">
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Игровая методика</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Детские ракетки</div>
+            <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+            <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+          </div>
+          <a href="#contact" class="btn btn-outline" style="margin-top:20px;">
+            <i class="fas fa-calendar-check"></i> Записаться
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- АБОНЕМЕНТЫ -->
+<section id="program">
+  <div class="container">
+    <h2 class="scale-in">Абонементы на месяц</h2>
+    <p class="fade-up" style="font-size:20px; margin-bottom:40px;">Регулярные занятия — залог стабильного прогресса</p>
+    
+    <div class="grid">
+      <div class="card fade-left">
+        <h3>Начальный</h3>
+        <div class="price"><span class="price-tag">15 000 ₽</span></div>
+        <p>2 тренировки в неделю · 1 час</p>
+        <div class="included-list">
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Аренда ракеток</div>
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+          <div class="included-item"><i class="fas fa-chart-line positive"></i> Отслеживание прогресса</div>
+          <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+        </div>
+      </div>
+      
+      <div class="card fade-up card-popular">
+        <h3>Оптимальный</h3>
+        <div class="price"><span class="price-tag">25 000 ₽</span></div>
+        <p>3 тренировки в неделю · 1,5 часа</p>
+        <div class="included-list">
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Аренда ракеток</div>
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+          <div class="included-item"><i class="fas fa-video positive"></i> Видеоанализ игры</div>
+          <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+        </div>
+      </div>
+      
+      <div class="card fade-right">
+        <h3>Профессиональный</h3>
+        <div class="price"><span class="price-tag">50 000 ₽</span></div>
+        <p>5 тренировок в неделю · 2 часа</p>
+        <div class="included-list">
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Аренда ракеток</div>
+          <div class="included-item"><i class="fas fa-check-circle positive"></i> Бесплатная вода</div>
+          <div class="included-item"><i class="fas fa-dumbbell positive"></i> Физподготовка</div>
+          <div class="included-item"><i class="fas fa-times-circle negative"></i> Аренда корта</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="alert-note fade-in">
+      <p><i class="fas fa-info-circle"></i> <strong>Важно:</strong> Аренда кортов не включена в стоимость тренировок. Аренда ракеток включена во все форматы. Вода предоставляется бесплатно на всех тренировках.</p>
+    </div>
+  </div>
+</section>
+
+<!-- РАСПИСАНИЕ -->
+<section class="alt">
+  <div class="container">
+    <h2 class="fade-left">Расписание тренировок</h2>
+    
+    <table class="schedule-table fade-up">
+      <thead>
+        <tr>
+          <th>День</th>
+          <th>Время</th>
+          <th>Формат</th>
+          <th>Уровень</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Понедельник</td>
+          <td>9:00 - 22:00</td>
+          <td>Индивидуальные / Групповые</td>
+          <td>Все уровни</td>
+        </tr>
+        <tr>
+          <td>Вторник</td>
+          <td>9:00 - 22:00</td>
+          <td>Индивидуальные / Групповые</td>
+          <td>Все уровни</td>
+        </tr>
+        <tr>
+          <td>Среда</td>
+          <td>9:00 - 22:00</td>
+          <td>Индивидуальные / Детские</td>
+          <td>Начинающие</td>
+        </tr>
+        <tr>
+          <td>Четверг</td>
+          <td>9:00 - 22:00</td>
+          <td>Индивидуальные / Групповые</td>
+          <td>Все уровни</td>
+        </tr>
+        <tr>
+          <td>Пятница</td>
+          <td>9:00 - 22:00</td>
+          <td>Индивидуальные / Групповые</td>
+          <td>Продвинутые</td>
+        </tr>
+        <tr>
+          <td>Суббота</td>
+          <td>10:00 - 20:00</td>
+          <td>Групповые / Спарринги</td>
+          <td>Все уровни</td>
+        </tr>
+        <tr>
+          <td>Воскресенье</td>
+          <td>10:00 - 18:00</td>
+          <td>Соревнования / Открытые уроки</td>
+          <td>Все уровни</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- СТАТИСТИКА -->
+<section>
+  <div class="container">
+    <h2 class="scale-in">AD|TENNIS в цифрах</h2>
+    
+    <div class="stats-grid">
+      <div class="stat-card fade-left">
+        <span class="stat-number">8</span>
+        <p>Лет опыта работы</p>
+      </div>
+      <div class="stat-card fade-up">
+        <span class="stat-number">150+</span>
+        <p>Обученных студентов</p>
+      </div>
+      <div class="stat-card fade-up">
+        <span class="stat-number">4.9</span>
+        <p>Средний рейтинг</p>
+      </div>
+      <div class="stat-card fade-right">
+        <span class="stat-number">100%</span>
+        <p>Удовлетворённых клиентов</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ГАЛЕРЕЯ -->
+<section class="alt">
+  <div class="container">
+    <h2 class="fade-left">Наши тренировки</h2>
+    
+    <div class="grid">
+      <div class="image-block fade-left">
+        <img src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+             alt="Тренировка техники">
+      </div>
+      <div class="image-block fade-up">
+        <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a43116?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+             alt="Теннисный корт">
+      </div>
+      <div class="image-block fade-right">
+        <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+             alt="Соревнования">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРИЗЫВ К ДЕЙСТВИЮ -->
+<section>
+  <div class="container">
+    <div class="cta-section bounce-in">
+      <h2>Начните играть в теннис уже сегодня!</h2>
+      <p style="font-size:20px; margin:20px 0 30px; max-width:600px; margin:0 auto 30px;">
+        Первая тренировка со скидкой 20% для новых учеников
+      </p>
+      <a href="#contact" class="btn" style="background:white; color:var(--accent);">
+        <i class="fas fa-gift"></i>
+        Получить скидку
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section id="contact" class="alt">
+  <div class="container">
+    <h2 class="fade-left">Запись на тренировки</h2>
+    
+    <div class="grid-2">
+      <div class="fade-left">
+        <div class="card">
+          <h3><i class="fas fa-map-marker-alt"></i> Адрес</h3>
+          <p>г. Ростов-на-Дону<br>ул. 1-й Конной Армии, 4А</p>
+          
+          <h3 style="margin-top:30px;"><i class="fas fa-clock"></i> Часы работы</h3>
+          <p>Пн-Пт: 9:00 - 22:00<br>Сб-Вс: 10:00 - 20:00</p>
+          
+          <h3 style="margin-top:30px;"><i class="fas fa-phone"></i> Телефон</h3>
+          <p>+7 (999) 123-45-67</p>
+        </div>
+      </div>
+      
+      <div class="fade-right">
+        <div class="card">
+          <h3><i class="fab fa-telegram"></i> Быстрая связь</h3>
+          <p>Самый быстрый способ записаться на тренировку — написать в Telegram</p>
+          
+          <a href="https://t.me/ad_tennis" class="btn" style="margin-top:30px; width:100%; justify-content:center;">
+            <i class="fab fa-telegram"></i>
+            Написать в Telegram
+          </a>
+          
+          <p style="margin-top:20px; text-align:center; font-size:16px;">
+            Обычно отвечаем в течение 15 минут
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <footer>
-© Академия тенниса · Дерябкин Аркадий Олегович
+  <div class="container">
+    <div class="fade-in">
+      <h2 style="color:white; margin-bottom:20px;">AD|TENNIS</h2>
+      <p style="color:rgba(255,255,255,0.8); margin-bottom:30px;">
+        Академия большого тенниса в Ростове-на-Дону. Профессиональные тренировки для всех уровней подготовки
+      </p>
+      
+      <div style="display:flex; justify-content:center; gap:20px; margin-bottom:30px;">
+        <a href="#" style="color:white; font-size:24px;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color:white; font-size:24px;"><i class="fab fa-vk"></i></a>
+        <a href="#" style="color:white; font-size:24px;"><i class="fab fa-youtube"></i></a>
+        <a href="#" style="color:white; font-size:24px;"><i class="fab fa-telegram"></i></a>
+      </div>
+      
+      <p style="color:rgba(255,255,255,0.6); font-size:14px;">
+        © 2024 AD|TENNIS. Все права защищены.
+      </p>
+    </div>
+  </div>
+  
+  <div class="marquee">
+    <span>🏆 Победитель Ростовской области 3 раза подряд • 🎾 1-я ракетка области • КМС • 🎾 Аренда ракеток включена • 💧 Вода бесплатно • 📱 Запись в Telegram • 🏆 Победитель Ростовской области 3 раза подряд • 🎾 1-я ракетка области • КМС • 💧 Вода бесплатно • 📱 Запись в Telegram</span>
+  </div>
 </footer>
 
 <script>
-const items=document.querySelectorAll('.reveal');
-function reveal(){
-  const t=window.innerHeight*0.85;
-  items.forEach(el=>{
-    if(el.getBoundingClientRect().top<t){
-      el.classList.add('show');
+const items = document.querySelectorAll('.fade-up, .fade-left, .fade-right, .fade-in, .scale-in, .bounce-in');
+
+function reveal() {
+  const triggerBottom = window.innerHeight * 0.85;
+  
+  items.forEach(item => {
+    const itemTop = item.getBoundingClientRect().top;
+    
+    if (itemTop < triggerBottom) {
+      item.classList.add('show');
     }
   });
 }
-window.addEventListener('scroll',reveal);
-window.addEventListener('load',reveal);
+
+window.addEventListener('scroll', reveal);
+window.addEventListener('load', reveal);
+
+// Парящие элементы
+const floatElements = document.querySelectorAll('.float-element');
+floatElements.forEach((el, index) => {
+  el.style.animationDelay = `${index * 0.2}s`;
+});
+
+// Анимация карточек при скролле
+const cards = document.querySelectorAll('.card');
+cards.forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    this.style.transform = 'translateY(-15px) scale(1.02) rotateY(5deg)';
+    this.style.boxShadow = '0 50px 150px rgba(0,0,0,0.15)';
+  });
+  
+  card.addEventListener('mouseleave', function() {
+    this.style.transform = 'translateY(0) scale(1) rotateY(0)';
+    this.style.boxShadow = '0 20px 60px rgba(0,0,0,.08)';
+  });
+});
+
+// Анимация для элементов статистики
+const statCards = document.querySelectorAll('.stat-card');
+statCards.forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    const number = this.querySelector('.stat-number');
+    if (number) {
+      const currentNum = parseInt(number.textContent);
+      let counter = 0;
+      const increment = currentNum / 30;
+      
+      const timer = setInterval(() => {
+        counter += increment;
+        if (counter >= currentNum) {
+          number.textContent = currentNum;
+          clearInterval(timer);
+        } else {
+          number.textContent = Math.floor(counter);
+        }
+      }, 50);
+    }
+  });
+});
+
+// Плавная прокрутка для якорных ссылок
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
 </script>
 
 </body>
